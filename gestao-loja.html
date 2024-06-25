@@ -6,6 +6,13 @@
     <title>Gestão de Loja</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-card {
+            border-left: 4px solid;
+            padding: 1rem;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 flex">
     <!-- Menu Lateral -->
@@ -44,32 +51,81 @@
     <!-- Conteúdo Principal -->
     <div class="flex-1 p-8">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold">Bem-vindo à Gestão de Loja</h1>
+            <div>
+                <h1 class="text-3xl font-bold">Dashboard</h1>
+                <p class="text-gray-600">Visão geral e resumo de vendas</p>
+            </div>
             <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center">
                 <i data-feather="power" class="mr-2"></i> Sair
             </button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             <!-- Dashboard Cards -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-bold mb-4">Vendas Totais</h2>
-                <p class="text-gray-700 text-2xl">R$ 50,000</p>
+            <div class="dashboard-card border-blue-500 bg-white rounded-lg shadow-md">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold">101.1K</h2>
+                        <p class="text-gray-700">Downloads</p>
+                        <p class="text-green-500 text-sm">↑ 3% desde o mês passado</p>
+                    </div>
+                    <i data-feather="download-cloud" class="text-blue-500 w-12 h-12"></i>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-bold mb-4">Novos Pedidos</h2>
-                <p class="text-gray-700 text-2xl">150</p>
+            <div class="dashboard-card border-yellow-500 bg-white rounded-lg shadow-md">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold">12.2K</h2>
+                        <p class="text-gray-700">Compras</p>
+                        <p class="text-green-500 text-sm">↑ 3% desde o mês passado</p>
+                    </div>
+                    <i data-feather="shopping-bag" class="text-yellow-500 w-12 h-12"></i>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-bold mb-4">Novos Clientes</h2>
-                <p class="text-gray-700 text-2xl">30</p>
+            <div class="dashboard-card border-purple-500 bg-white rounded-lg shadow-md">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold">5.3K</h2>
+                        <p class="text-gray-700">Clientes</p>
+                        <p class="text-green-500 text-sm">↑ 3% desde o mês passado</p>
+                    </div>
+                    <i data-feather="users" class="text-purple-500 w-12 h-12"></i>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2 lg:col-span-1">
-                <h2 class="text-xl font-bold mb-4">Estoque Disponível</h2>
-                <p class="text-gray-700 text-2xl">1,200 itens</p>
+            <div class="dashboard-card border-teal-500 bg-white rounded-lg shadow-md md:col-span-2 lg:col-span-1">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold">7</h2>
+                        <p class="text-gray-700">Canais</p>
+                        <p class="text-green-500 text-sm">↑ 3% desde o mês passado</p>
+                    </div>
+                    <i data-feather="monitor" class="text-teal-500 w-12 h-12"></i>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2 lg:col-span-2">
-                <h2 class="text-xl font-bold mb-4">Desempenho Semanal</h2>
-                <p class="text-gray-700">Gráfico fictício de desempenho semanal aqui.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Gráfico de Receitas -->
+            <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Divisão de Receitas</h2>
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="text-gray-700 text-2xl font-bold">$59,482</p>
+                        <p class="text-gray-500">Receita Atual</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-700 text-2xl font-bold">$50,000</p>
+                        <p class="text-gray-500">Meta de Receita</p>
+                    </div>
+                    <div>
+                        <p class="text-green-500 text-2xl font-bold">119%</p>
+                        <p class="text-gray-500">Meta Atingida</p>
+                    </div>
+                </div>
+                <canvas id="revenueChart" class="h-64"></canvas>
+            </div>
+            <!-- Gráfico de Segmentos -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Segmentos</h2>
+                <canvas id="segmentsChart" class="h-64"></canvas>
             </div>
         </div>
     </div>
@@ -77,7 +133,50 @@
         function logout() {
             window.location.href = 'index.html';
         }
+
         feather.replace();
+
+        // Gráfico de Receitas
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
+                datasets: [{
+                    label: 'Receita Atual',
+                    data: [10000, 15000, 20000, 25000, 30000, 35000],
+                    backgroundColor: '#3b82f6',
+                }, {
+                    label: 'Meta de Receita',
+                    data: [8000, 12000, 16000, 20000, 24000, 28000],
+                    backgroundColor: '#60a5fa',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Segmentos
+        const segmentsCtx = document.getElementById('segmentsChart').getContext('2d');
+        const segmentsChart = new Chart(segmentsCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Alpha', 'Beta', 'Gamma', 'Delta'],
+                datasets: [{
+                    data: [25, 25, 25, 25],
+                    backgroundColor: ['#3b82f6', '#14b8a6', '#9333ea', '#f59e0b']
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        });
     </script>
 </body>
 </html>
